@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Data.Models;
 
-internal class User : ModelBaseId
+public class User : ModelBaseId
 {
     [Required]
     public string FirstName {  get; set; } = string.Empty;
