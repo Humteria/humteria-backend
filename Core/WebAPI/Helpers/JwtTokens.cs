@@ -15,6 +15,8 @@ public class JwtTokens
     private static readonly string _Audience;
     private static readonly string _Issuer;
 
+
+    //TODO: Check if Static or should be changed to singleton
     static JwtTokens()
     {
         _configuration = new ConfigurationBuilder()

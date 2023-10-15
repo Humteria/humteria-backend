@@ -55,12 +55,12 @@ public class PasswordHasher
 
     public static string HashPassword(string password)
     {
-        int randomIndex = GenerateRanInt(0, pepperList.Length - 1);
+        int randomIndex = GenerateRandomInt(0, pepperList.Length - 1);
         string passwordToBeHashed = salt + password + pepperList[randomIndex];
         return BCrypt.Net.BCrypt.HashPassword(passwordToBeHashed);
     }
 
-    public static int GenerateRanInt(int min, int max)
+    public static int GenerateRandomInt(int min, int max)
     {
         RandomNumberGenerator rng = RandomNumberGenerator.Create();
         byte[] data = new byte[4];

@@ -1,6 +1,5 @@
 namespace Humteria.WebAPI;
 
-using Humteria.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -75,7 +74,6 @@ public class Program
             app.UseSwaggerUI();
         }
 
-        app.UseGlobalErrorHandling();
 
         app.UseHttpsRedirection();
         app.UseAuthorization();
