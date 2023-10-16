@@ -1,6 +1,7 @@
 ﻿namespace Data.Models;
 
-internal class JWTToken
+´public class JwtToken
 {
-    //TODO: make JWT Token
+    [Required]
+    public string AccessToken { get; set; } = string.Empty;
 }
