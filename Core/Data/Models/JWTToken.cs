@@ -2,6 +2,5 @@
 
 public class JwtToken
 {
-    [Required]
-    public string AccessToken { get; set; } = string.Empty;
+    //TODO: make JWT Token
 }
