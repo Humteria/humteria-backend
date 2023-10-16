@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace Humteria.Helpers;
+namespace Humteria.WebAPI.Helpers;
 
 public class PasswordHasher
 {

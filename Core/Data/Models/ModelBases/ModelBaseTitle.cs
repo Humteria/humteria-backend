@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using global::Humteria.Data.Models.ModelBases;
+using System.ComponentModel.DataAnnotations;
 
-namespace Data.Models.ModelBases;
+namespace Humteria.Data.DTOs.UserDTO;
 
-public abstract class ModelBaseTitle : ModelBaseId
+public class ModelBaseTitle : ModelBaseId
 {
     [Required]
     [MaxLength(64)]

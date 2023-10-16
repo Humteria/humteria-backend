@@ -1,7 +1,8 @@
-﻿using Data.Models.Bases;
+﻿using Humteria.Data.Models.Bases;
 using System.ComponentModel.DataAnnotations;
 
-namespace Data.Models.ModelBases;
+namespace Humteria.Data.Models.ModelBases;
+
 public abstract class ModelBaseId : BaseId
 {
     [Key]

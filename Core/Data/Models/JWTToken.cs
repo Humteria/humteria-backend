@@ -1,6 +1,8 @@
-﻿namespace Data.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
-´public class JwtToken
+namespace Humteria.Data.Models;
+
+public class JwtToken
 {
     [Required]
     public string AccessToken { get; set; } = string.Empty;
