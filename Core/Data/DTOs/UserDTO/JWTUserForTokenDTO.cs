@@ -1,6 +1,6 @@
-﻿using Data.Models.Bases;
+﻿using Humteria.Data.Models.Bases;
 
-namespace Data.DTOs.UserDTO;
+namespace Humteria.Data.DTOs.UserDTO;
 
 public class JWTUserForTokenDTO : BaseId
 {

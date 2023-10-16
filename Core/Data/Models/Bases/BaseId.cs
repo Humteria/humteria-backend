@@ -1,4 +1,4 @@
-﻿namespace Data.Models.Bases;
+﻿namespace Humteria.Data.Models.Bases;
 
 public abstract class BaseId
 {
