@@ -1,6 +1,10 @@
-﻿namespace Data.Models;
+﻿using Data.Models.ModelBases;
+using System.ComponentModel.DataAnnotations;
 
-public class JwtToken
+namespace Data.Models;
+
+public class JwtToken : ModelBaseId
 {
-    //TODO: make JWT Token
+    [Required]
+    public string AccessToken { get; set; } = string.Empty;
 }
