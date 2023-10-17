@@ -1,7 +1,7 @@
 ﻿using global::Humteria.Data.Models.ModelBases;
 using System.ComponentModel.DataAnnotations;
 
-namespace Humteria.Data.DTOs.UserDTO;
+namespace Humteria.Data.Models.ModelBases;
 
 public class ModelBaseTitle : ModelBaseId
 {

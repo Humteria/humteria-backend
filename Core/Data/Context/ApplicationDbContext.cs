@@ -1,4 +1,4 @@
-﻿using Data.Models;
+﻿using Humteria.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Humteria.Data.Context;
