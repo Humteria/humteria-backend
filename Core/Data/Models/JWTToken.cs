@@ -1,9 +1,8 @@
-﻿using Data.Models.ModelBases;
 using System.ComponentModel.DataAnnotations;
 
-namespace Data.Models;
+namespace Humteria.Data.Models;
 
-public class JwtToken : ModelBaseId
+public class JwtToken
 {
     [Required]
     public string AccessToken { get; set; } = string.Empty;

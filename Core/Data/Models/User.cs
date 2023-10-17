@@ -1,12 +1,7 @@
-﻿using Data.Models.ModelBases;
-using System;
-using System.Collections.Generic;
+﻿using Humteria.Data.Models.ModelBases;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Data.Models;
+namespace Humteria.Data.Models;
 
 public class User : ModelBaseId
 {
