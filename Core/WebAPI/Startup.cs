@@ -69,6 +69,8 @@ public class Startup
     {
         app.ApplicationServices.ConfigureDatabaseServices();
 
+        app.UseRouting();
+
         app.UseCors(policy => policy
             .AllowAnyMethod()
             .AllowAnyHeader()
@@ -83,7 +85,6 @@ public class Startup
 
         app.UseHttpsRedirection();
         app.UseAuthorization();
-
 
         app.UseEndpoints(endpoints =>
             endpoints.MapControllers());
