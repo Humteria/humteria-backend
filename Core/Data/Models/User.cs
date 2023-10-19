@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Humteria.Data.Models;
 
-internal class User : ModelBaseId
+public class User : ModelBaseId
 {
     [Required]
     public string FirstName {  get; set; } = string.Empty;
@@ -21,4 +21,6 @@ internal class User : ModelBaseId
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public bool IsSystemAdmin { get; set; } = false;
+    //TODO ADD FK TO Token
+
 }
