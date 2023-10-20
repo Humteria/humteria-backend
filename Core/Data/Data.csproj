@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DTOs\Mail\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

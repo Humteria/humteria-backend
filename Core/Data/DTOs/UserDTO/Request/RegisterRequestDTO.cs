@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Humteria.Data.DTOs.UserDTO;
+namespace Humteria.Data.DTOs.UserDTO.Request;
 
 public class RegisterRequestDTO
 {
