@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Humteria.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231017111801_InitDB")]
-    partial class InitDB
+    [Migration("20231020140933_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,10 +28,16 @@ namespace Humteria.Data.Migrations
             modelBuilder.Entity("Humteria.Data.Models.JwtToken", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AccessToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ExpiresIn")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TokenType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -82,6 +88,21 @@ namespace Humteria.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Humteria.Data.Models.JwtToken", b =>
+                {
+                    b.HasOne("Humteria.Data.Models.User", null)
+                        .WithOne("JwtToken")
+                        .HasForeignKey("Humteria.Data.Models.JwtToken", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Humteria.Data.Models.User", b =>
+                {
+                    b.Navigation("JwtToken")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
