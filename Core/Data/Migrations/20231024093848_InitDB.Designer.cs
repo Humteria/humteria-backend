@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Humteria.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231017111801_InitDB")]
+    [Migration("20231024093848_InitDB")]
     partial class InitDB
     {
         /// <inheritdoc />
