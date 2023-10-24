@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Humteria.Data.DTOs.UserDTO;
+namespace Humteria.Data.DTOs.UserDTO.Request;
 
 public class LoginRequestDTO
 {
-
-    //TODO maybe remove required attribute from dtos
     [Required]
     public string Username { get; set; } = string.Empty;
     [Required]
