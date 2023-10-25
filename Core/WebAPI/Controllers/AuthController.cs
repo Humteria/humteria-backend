@@ -49,8 +49,9 @@ public class AuthController : ControllerBase
             return BadRequest(registerError);
         }
 
-        User? userAlreadyExists = await _repository.GetUserByMail(userRegisterRequest.Email);
-        if (userAlreadyExists != null)
+        User? mailAdreadyExists = await _repository.GetUserByMail(userRegisterRequest.Email);
+        User? usernameAlreadyExists = await _repository.GetUserByUsername(userRegisterRequest.Username);
+        if (usernameAlreadyExists != null || mailAdreadyExists != null)
         {
             return BadRequest(registerError);
         }
@@ -89,10 +90,14 @@ public class AuthController : ControllerBase
         {
             return BadRequest(loginError);
         }
-        User? userFromDB = await _repository.GetUserByUsername(userLoginRequest.Username);
+        User? userFromDB = await _repository.GetUserByUsername(userLoginRequest.UsernameOrMail);
         if (userFromDB == null || !PasswordHasher.CompareHashAndPassword(userFromDB.Password, userLoginRequest.Password))
         {
-            return Unauthorized("Invalid Username or Password");
+            userFromDB = await _repository.GetUserByMail(userLoginRequest.UsernameOrMail);
+            if (userFromDB == null || !PasswordHasher.CompareHashAndPassword(userFromDB.Password, userLoginRequest.Password))
+            {
+                return Unauthorized("Invalid Username or Password");
+            }
         }
 
         LoginResponseDTO loginResponseDTO = _mapper.Map<LoginResponseDTO>(userFromDB);
