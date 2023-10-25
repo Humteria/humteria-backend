@@ -29,6 +29,11 @@ public class MainSQLServices : IMainInterface
         return await _context.Users.FirstOrDefaultAsync(x => x.Email == mail);
     }
 
+    public async Task<User?> GetUserByUsername(string username)
+    {
+        return await _context.Users.FirstOrDefaultAsync(x => x.Username == username);
+    }
+
     public async Task<User?> RegisterNewUser(User user)
     {
         await _context.Users.AddAsync(user);

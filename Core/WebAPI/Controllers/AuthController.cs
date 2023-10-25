@@ -33,20 +33,6 @@ public class AuthController : ControllerBase
         }
     }
 
-    [HttpPost, Route("test")]
-    public IActionResult CreateUser()
-    {
-        try
-        {
-            return StatusCode(200, "Successful");
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(400, ex.Message);
-        }
-        
-    }
-
     [HttpPost, Route("register")]
     public async Task<ActionResult<RegisterResponseDTO>> Register(RegisterRequestDTO userRegisterRequest)
     {
@@ -86,5 +72,34 @@ public class AuthController : ControllerBase
             return Ok(userToReturn);
         }
         return BadRequest(registerError);
+    }
+
+    [HttpPost, Route("login")]
+    public async Task<ActionResult<LoginResponseDTO>> Login(LoginRequestDTO userLoginRequest)
+    {
+        ProblemDetails loginError = new ProblemDetails
+        {
+            Status = StatusCodes.Status400BadRequest,
+            Type = "Bad Request",
+            Title = "Error during login of user",
+            Detail = "There was an error during the login."
+        };
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(loginError);
+        }
+        User? userFromDB = await _repository.GetUserByUsername(userLoginRequest.Username);
+        if (userFromDB == null || !PasswordHasher.CompareHashAndPassword(userFromDB.Password, userLoginRequest.Password))
+        {
+            return Unauthorized("Invalid Username or Password");
+        }
+
+        LoginResponseDTO loginResponseDTO = _mapper.Map<LoginResponseDTO>(userFromDB);
+        JWTUserForTokenDTO userForTokenDTO = _mapper.Map<JWTUserForTokenDTO>(userFromDB);
+        loginResponseDTO.Token = JwtTokens.GenerateToken(userForTokenDTO);
+  
+        Thread.Sleep(PasswordHasher.GenerateRandomInt(1, 1000));
+        return Ok(loginResponseDTO);
     }
 }

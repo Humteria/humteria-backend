@@ -10,5 +10,6 @@ public interface IMainInterface
 
     // User
     Task<User?> GetUserByMail(string mail);
+    Task<User?> GetUserByUsername(string username);
     Task<User?> RegisterNewUser(User user);
 }
