@@ -12,13 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Humteria.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:Core/Data/Migrations/20231024093848_InitDB.Designer.cs
-    [Migration("20231024093848_InitDB")]
-    partial class InitDB
-========
     [Migration("20231020140933_init")]
     partial class init
->>>>>>>> develop:Core/Data/Migrations/20231020140933_init.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

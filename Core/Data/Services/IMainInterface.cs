@@ -4,13 +4,11 @@ namespace Humteria.Data.Services;
 
 public interface IMainInterface
 {
-    //Change Saving
+    // Save Changes
     bool SaveChanges();
     Task<int> SaveChangesAsync();
 
-    //User Handling
+    // User
     Task<User?> GetUserByMail(string mail);
     Task<User?> RegisterNewUser(User user);
-
- 
 }
