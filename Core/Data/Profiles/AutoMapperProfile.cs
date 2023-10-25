@@ -10,10 +10,15 @@ public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile() 
     {
-        //User
+        // Users
         CreateMap<RegisterRequestDTO, User>();
-        // JWT
-        CreateMap<LoginResponseDTO, JWTUserForTokenDTO>();
+        CreateMap<User, LoginResponseDTO>();
+        CreateMap<User, RegisterResponseDTO>();
+
+        // SQL
+        CreateMap<User, JWTUserForTokenDTO>();
+        CreateMap<JWTUserForTokenDTO, User>();
+        CreateMap<JWTUserForTokenDTO, RegisterResponseDTO>();
     }
 
     

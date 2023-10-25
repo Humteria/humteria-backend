@@ -10,7 +10,7 @@ namespace Humteria.WebAPI.Helpers;
 
 public class JwtTokens
 {
-    private static readonly IConfigurationRoot _configuration;
+    private static readonly IConfiguration _configuration;
     private static readonly string _TokenSecret;
     private static readonly string _Audience;
     private static readonly string _Issuer;
@@ -19,19 +19,17 @@ public class JwtTokens
     //TODO: Check if Static or should be changed to singleton
     static JwtTokens()
     {
-        _configuration = new ConfigurationBuilder()
-        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-        .Build();
-        string? tempTokenHolder = _configuration.GetValue<string>("JWT:TokenSecret");
-        string? tempAudienceHolder = _configuration.GetValue<string>("JWT:Audience");
-        string? tempIssuerHolder = _configuration.GetValue<string>("JWT:Issuer");
-        if (tempTokenHolder == null || tempAudienceHolder == null || tempIssuerHolder == null)
-        { 
-            throw new ArgumentNullException();
-        } else { 
-            _TokenSecret = tempTokenHolder; 
-            _Audience = tempAudienceHolder; 
-            _Issuer = tempIssuerHolder; 
+        var configurationBuilder = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+        _configuration = configurationBuilder.Build();
+
+        _TokenSecret = _configuration.GetValue<string>("JWT:TokenSecret");
+        _Audience = _configuration.GetValue<string>("JWT:Audience");
+        _Issuer = _configuration.GetValue<string>("JWT:Issuer");
+
+        if (_TokenSecret == null || _Audience == null || _Issuer == null)
+        {
+            throw new ArgumentNullException("JWT configuration values are missing.");
         }
     }
 
@@ -41,13 +39,11 @@ public class JwtTokens
         var userData = JsonConvert.SerializeObject(user);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.UserData, userData), }),
+            Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.UserData, userData) }),
             Expires = DateTime.UtcNow.AddDays(daysToExpire),
             Issuer = _Issuer,
             Audience = _Audience,
-            SigningCredentials = new SigningCredentials
-                (new SymmetricSecurityKey(key),
-                SecurityAlgorithms.HmacSha256Signature)
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -71,22 +67,25 @@ public class JwtTokens
                 IssuerSigningKey = new SymmetricSecurityKey(key)
             }, out SecurityToken validatedToken);
 
-            var userString = decodedToken.Claims.Where(x => x.Type == ClaimTypes.UserData).FirstOrDefault();
+            var userString = decodedToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.UserData)?.Value;
+
             if (userString != null)
             {
                 return Guid.Empty;
             }
 
-            JWTUserForTokenDTO? user = JsonConvert.DeserializeObject<JWTUserForTokenDTO>(userString.Value);
-            if(user != null)
+            JWTUserForTokenDTO user = JsonConvert.DeserializeObject<JWTUserForTokenDTO>(userString);
+
+            if (user != null)
             {
                 return Guid.Empty;
             }
+
             return user.Id;
         }
-        catch (Exception) 
+        catch (Exception)
         {
-            return Guid.Empty; ;
+            return Guid.Empty;
         }
     }
 }
