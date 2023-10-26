@@ -1,0 +1,26 @@
+name: Humteria Backend Build Pipeline
+on:
+  push:
+    branches:
+    - main
+    - develop
+  pull_request:
+    branches:
+    - main
+    - develop
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checking Out Code
+      uses: actions/checkout@v4
+    - name: Installing .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+    - name: Restoring Nuget Packages
+      run: dotnet restore ./Humteria.Backend.sln
+    - name: Builduing Projects
+      run: dotnet build --no-restore ./Humteria.Backend.sln
+    - name: Running Tests
+      run: dotnet test --no-build --verbosity normal ./Humteria.Backend.sln
