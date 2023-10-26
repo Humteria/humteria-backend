@@ -1,5 +1,5 @@
 ﻿
-using Humteria.Data.DTOs.UserDTO;
+using Humteria.Application.DTOs.UserDTO;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Humteria.WebAPI.Helpers;
 
-public class JwtTokens
+public class JwtTokenHelper
 {
     private static readonly IConfiguration _configuration;
     private static readonly string _TokenSecret;
@@ -17,7 +17,7 @@ public class JwtTokens
 
 
     //TODO: Check if Static or should be changed to singleton
-    static JwtTokens()
+    static JwtTokenHelper()
     {
         var configurationBuilder = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
@@ -50,7 +50,6 @@ public class JwtTokens
         var stringToken = tokenHandler.WriteToken(token);
         return stringToken;
     }
-
     public static Guid ValidateToken(string token)
     {
         try

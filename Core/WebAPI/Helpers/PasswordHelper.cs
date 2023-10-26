@@ -2,7 +2,7 @@
 
 namespace Humteria.WebAPI.Helpers;
 
-public class PasswordHasher
+public class PasswordHelper
 {
     private static readonly string salt = "@Q-iFwja7fPns$67wIl&ZB6lgjpVYBxE";
     private static readonly string[] pepperList = {

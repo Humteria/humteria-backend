@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Humteria.Data.DTOs.UserDTO.Request;
+﻿namespace Humteria.Application.DTOs.UserDTO.Request;
 
 public class LoginRequestDTO
 {

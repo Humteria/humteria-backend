@@ -1,12 +1,10 @@
-﻿using CAS.Services.Database;
-using Humteria.Data;
-using Humteria.Data.Profiles;
+﻿using Humteria.Data;
 using Humteria.Data.Services;
-using Humteria.WebAPI.Controllers;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Humteria.Application.Profiles;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using System.Text;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Humteria.WebAPI;
 

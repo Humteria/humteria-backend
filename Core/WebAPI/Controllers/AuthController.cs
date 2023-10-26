@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Humteria.Data.DTOs.UserDTO;
-using Humteria.Data.DTOs.UserDTO.Request;
-using Humteria.Data.DTOs.UserDTO.Response;
+using Humteria.Application.DTOs.UserDTO;
+using Humteria.Application.DTOs.UserDTO.Request;
+using Humteria.Application.DTOs.UserDTO.Response;
 using Humteria.Data.Models;
 using Humteria.Data.Services;
 using Humteria.WebAPI.Helpers;
@@ -62,12 +62,12 @@ public class AuthController : ControllerBase
             return BadRequest(registerError);
         }
         User userToAddToDB = _mapper.Map<User>(userRegisterRequest);
-        userToAddToDB.Password = PasswordHasher.HashPassword(userRegisterRequest.Password);
+        userToAddToDB.Password = PasswordHelper.HashPassword(userRegisterRequest.Password);
 
         User? responseAddUser = await _repository.RegisterNewUser(userToAddToDB);
         if (responseAddUser != null && _repository.SaveChanges())
         {
-            string token = JwtTokens.GenerateToken(_mapper.Map<JWTUserForTokenDTO>(responseAddUser), 1);
+            string token = JwtTokenHelper.GenerateToken(_mapper.Map<JWTUserForTokenDTO>(responseAddUser), 1);
             RegisterResponseDTO userToReturn = _mapper.Map<RegisterResponseDTO>(responseAddUser);
             userToReturn.Token = token;
             return Ok(userToReturn);
@@ -91,10 +91,10 @@ public class AuthController : ControllerBase
             return BadRequest(loginError);
         }
         User? userFromDB = await _repository.GetUserByUsername(userLoginRequest.UsernameOrMail);
-        if (userFromDB == null || !PasswordHasher.CompareHashAndPassword(userFromDB.Password, userLoginRequest.Password))
+        if (userFromDB == null || !PasswordHelper.CompareHashAndPassword(userFromDB.Password, userLoginRequest.Password))
         {
             userFromDB = await _repository.GetUserByMail(userLoginRequest.UsernameOrMail);
-            if (userFromDB == null || !PasswordHasher.CompareHashAndPassword(userFromDB.Password, userLoginRequest.Password))
+            if (userFromDB == null || !PasswordHelper.CompareHashAndPassword(userFromDB.Password, userLoginRequest.Password))
             {
                 return Unauthorized("Invalid Username or Password");
             }
@@ -102,9 +102,9 @@ public class AuthController : ControllerBase
 
         LoginResponseDTO loginResponseDTO = _mapper.Map<LoginResponseDTO>(userFromDB);
         JWTUserForTokenDTO userForTokenDTO = _mapper.Map<JWTUserForTokenDTO>(userFromDB);
-        loginResponseDTO.Token = JwtTokens.GenerateToken(userForTokenDTO);
+        loginResponseDTO.Token = JwtTokenHelper.GenerateToken(userForTokenDTO);
   
-        Thread.Sleep(PasswordHasher.GenerateRandomInt(1, 1000));
+        Thread.Sleep(PasswordHelper.GenerateRandomInt(1, 1000));
         return Ok(loginResponseDTO);
     }
 }

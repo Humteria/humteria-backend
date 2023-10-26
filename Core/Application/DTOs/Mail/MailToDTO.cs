@@ -1,4 +1,4 @@
-﻿namespace Humteria.Data.DTOs.Mail;
+﻿namespace Humteria.Application.DTOs.Mail;
 
 internal class MailToDTO
 {
