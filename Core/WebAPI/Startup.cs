@@ -1,4 +1,8 @@
-﻿using Humteria.Data;
+﻿using CAS.Services.Database;
+using Humteria.Data;
+using Humteria.Data.Profiles;
+using Humteria.Data.Services;
+using Humteria.WebAPI.Controllers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -47,6 +51,8 @@ public class Startup
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "Humteria API", Version = "v1" });
             });
 
+        services.AddAutoMapper(typeof(AutoMapperProfile));
+
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(config =>
             {
@@ -63,6 +69,9 @@ public class Startup
                     ValidateIssuerSigningKey = true,
                 };
             });
+
+                services.AddTransient<IMainInterface, MainSQLServices>();
+
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
