@@ -1,10 +1,7 @@
-﻿
-using Humteria.Application.DTOs.UserDTO;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 namespace Humteria.WebAPI.Helpers;
 

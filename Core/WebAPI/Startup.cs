@@ -1,8 +1,12 @@
-﻿using Humteria.Data;
-using Humteria.Data.Services;
+﻿global using Humteria.Application.DTOs.UserDTO;
+global using Humteria.Application.DTOs.UserDTO.Request;
+global using Humteria.Application.DTOs.UserDTO.Response;
+global using Humteria.Data.Models;
+global using Humteria.Data.Services;
+global using System.Text;
+using Humteria.Data;
 using Humteria.Application.Profiles;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 

@@ -1,5 +1,6 @@
 ﻿global using Humteria.Data.Models.Bases;
 global using System.ComponentModel.DataAnnotations;
+global using AutoMapper;
 using Humteria.Application.Profiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
