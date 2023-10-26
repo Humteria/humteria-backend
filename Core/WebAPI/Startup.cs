@@ -9,6 +9,7 @@ using Humteria.Application.Profiles;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Humteria.WebAPI.Helpers;
 
 namespace Humteria.WebAPI;
 
@@ -26,6 +27,8 @@ public class Startup
         services.AddEndpointsApiExplorer();
 
         services.AddDatabaseServices(Configuration);
+
+        services.AddSingleton<IJwtGenerator, JwtTokenHelper>();
 
         services.AddSwaggerGen(
             options =>
@@ -81,7 +84,7 @@ public class Startup
         app.ApplicationServices.ConfigureDatabaseServices();
 
         app.UseRouting();
-
+        
         app.UseCors(policy => policy
             .AllowAnyMethod()
             .AllowAnyHeader()
