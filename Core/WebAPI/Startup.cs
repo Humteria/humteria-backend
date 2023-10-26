@@ -1,12 +1,14 @@
-﻿using CAS.Services.Database;
+﻿global using Humteria.Application.DTOs.UserDTO;
+global using Humteria.Application.DTOs.UserDTO.Request;
+global using Humteria.Application.DTOs.UserDTO.Response;
+global using Humteria.Data.Models;
+global using Humteria.Data.Services;
+global using System.Text;
 using Humteria.Data;
-using Humteria.Data.Profiles;
-using Humteria.Data.Services;
-using Humteria.WebAPI.Controllers;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Humteria.Application.Profiles;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Humteria.WebAPI;
 

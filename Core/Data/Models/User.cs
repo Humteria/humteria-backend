@@ -1,5 +1,4 @@
 ﻿using Humteria.Data.Models.ModelBases;
-using System.ComponentModel.DataAnnotations;
 
 namespace Humteria.Data.Models;
 
@@ -21,6 +20,6 @@ public class User : ModelBaseId
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public bool IsSystemAdmin { get; set; } = false;
-    public JwtToken JwtToken { get; set; }
+    public JwtToken? JwtToken { get; set; }
 
 }

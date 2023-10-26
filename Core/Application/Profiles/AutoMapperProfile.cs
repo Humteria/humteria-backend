@@ -1,11 +1,9 @@
-﻿using AutoMapper;
-using Humteria.Data.DTOs.UserDTO;
-using Humteria.Data.DTOs.UserDTO.Request;
-using Humteria.Data.DTOs.UserDTO.Response;
+﻿using Humteria.Application.DTOs.UserDTO;
+using Humteria.Application.DTOs.UserDTO.Request;
+using Humteria.Application.DTOs.UserDTO.Response;
 using Humteria.Data.Models;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
-namespace Humteria.Data.Profiles;
+namespace Humteria.Application.Profiles;
 
 public class AutoMapperProfile : Profile
 {

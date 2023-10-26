@@ -13,7 +13,7 @@ namespace Humteria.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20231020140933_init")]
-    partial class init
+    partial class InitDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

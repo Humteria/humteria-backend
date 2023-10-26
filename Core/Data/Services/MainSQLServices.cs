@@ -1,9 +1,8 @@
 ﻿using Humteria.Data.Context;
 using Humteria.Data.Models;
-using Humteria.Data.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace CAS.Services.Database;
+namespace Humteria.Data.Services;
 
 public class MainSQLServices : IMainInterface
 {

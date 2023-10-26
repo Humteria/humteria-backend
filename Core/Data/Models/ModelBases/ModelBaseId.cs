@@ -1,5 +1,4 @@
 ﻿using Humteria.Data.Models.Bases;
-using System.ComponentModel.DataAnnotations;
 
 namespace Humteria.Data.Models.ModelBases;
 
