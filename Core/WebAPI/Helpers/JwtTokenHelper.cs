@@ -13,30 +13,30 @@ public interface IJwtGenerator
 
 public class JwtTokenHelper : IJwtGenerator
 {
-    private readonly string m_tokenSecret;
-    private readonly string m_issuer;
-    private readonly string m_audience;
+    private readonly string _tokenSecret;
+    private readonly string _issuer;
+    private readonly string _audience;
 
     public JwtTokenHelper(IConfiguration configuration)
     {
         IConfigurationSection jwt = configuration.GetRequiredSection("JWT");
 
-        m_tokenSecret = jwt.GetRequiredSection("TokenSecret").Get<string>()!;
-        m_issuer = jwt.GetRequiredSection("Issuer").Get<string>()!;
-        m_audience = jwt.GetRequiredSection("Audience").Get<string>()!;
+        _tokenSecret = jwt.GetRequiredSection("TokenSecret").Get<string>()!;
+        _issuer = jwt.GetRequiredSection("Issuer").Get<string>()!;
+        _audience = jwt.GetRequiredSection("Audience").Get<string>()!;
     }    
 
     public string GenerateToken(JWTUserForTokenDTO user, int daysToExpire = 5)
     {
-        byte[] key = Encoding.UTF8.GetBytes(m_tokenSecret);
+        byte[] key = Encoding.UTF8.GetBytes(_tokenSecret);
         string userData = JsonConvert.SerializeObject(user);
 
         SecurityTokenDescriptor tokenDescriptor = new()
         {
             Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.UserData, userData) }),
             Expires = DateTime.UtcNow.AddDays(daysToExpire),
-            Issuer = m_issuer,
-            Audience = m_audience,
+            Issuer = _issuer,
+            Audience = _audience,
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
 
@@ -51,15 +51,15 @@ public class JwtTokenHelper : IJwtGenerator
         try
         {
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            byte[] key = Encoding.UTF8.GetBytes(m_tokenSecret);
+            byte[] key = Encoding.UTF8.GetBytes(_tokenSecret);
 
             ClaimsPrincipal decodedToken = tokenHandler.ValidateToken(token, new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 ValidateIssuer = true,
                 ValidateAudience = true,
-                ValidIssuer = m_issuer,
-                ValidAudience = m_audience,
+                ValidIssuer = _issuer,
+                ValidAudience = _audience,
                 IssuerSigningKey = new SymmetricSecurityKey(key)
             }, out SecurityToken validatedToken);
 
