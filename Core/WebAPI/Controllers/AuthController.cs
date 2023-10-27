@@ -10,28 +10,21 @@ namespace Humteria.WebAPI.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
-    private readonly IConfigurationRoot _configuration;
     private readonly IMapper _mapper;
     private readonly IMainInterface _repository;
+    private readonly IJwtGenerator _jwtGenerator;
 
-    public AuthController(IMainInterface repository, IMapper mapper)
+    public AuthController(IJwtGenerator jwtGenerator, IMainInterface repository, IMapper mapper)
     {
-        _configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .Build();
+        _jwtGenerator = jwtGenerator;
         _mapper = mapper;
         _repository = repository;
-
-        if (_configuration == null || _mapper == null || _repository == null)
-        {
-            throw new ArgumentNullException();
-        }
     }
 
     [HttpPost, Route("register")]
     public async Task<ActionResult<RegisterResponseDTO>> Register(RegisterRequestDTO userRegisterRequest)
     {
-        ProblemDetails registerError = new ProblemDetails
+        ProblemDetails registerError = new()
         {
             Status = StatusCodes.Status400BadRequest,
             Type = "Bad Request",
@@ -62,7 +55,7 @@ public class AuthController : ControllerBase
         User? responseAddUser = await _repository.RegisterNewUser(userToAddToDB);
         if (responseAddUser != null && _repository.SaveChanges())
         {
-            string token = JwtTokenHelper.GenerateToken(_mapper.Map<JWTUserForTokenDTO>(responseAddUser), 1);
+            string token = _jwtGenerator.GenerateToken(_mapper.Map<JWTUserForTokenDTO>(responseAddUser), 1);
             RegisterResponseDTO userToReturn = _mapper.Map<RegisterResponseDTO>(responseAddUser);
             userToReturn.Token = token;
             return Ok(userToReturn);
@@ -73,7 +66,7 @@ public class AuthController : ControllerBase
     [HttpPost, Route("login")]
     public async Task<ActionResult<LoginResponseDTO>> Login(LoginRequestDTO userLoginRequest)
     {
-        ProblemDetails loginError = new ProblemDetails
+        ProblemDetails loginError = new()
         {
             Status = StatusCodes.Status400BadRequest,
             Type = "Bad Request",
@@ -97,7 +90,7 @@ public class AuthController : ControllerBase
 
         LoginResponseDTO loginResponseDTO = _mapper.Map<LoginResponseDTO>(userFromDB);
         JWTUserForTokenDTO userForTokenDTO = _mapper.Map<JWTUserForTokenDTO>(userFromDB);
-        loginResponseDTO.Token = JwtTokenHelper.GenerateToken(userForTokenDTO);
+        loginResponseDTO.Token = _jwtGenerator.GenerateToken(userForTokenDTO);
   
         Thread.Sleep(PasswordHelper.GenerateRandomInt(1, 1000));
         return Ok(loginResponseDTO);

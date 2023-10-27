@@ -5,79 +5,72 @@ using System.Security.Claims;
 
 namespace Humteria.WebAPI.Helpers;
 
-public class JwtTokenHelper
+public interface IJwtGenerator
 {
-    private static readonly IConfiguration _configuration;
-    private static readonly string _TokenSecret;
-    private static readonly string _Audience;
-    private static readonly string _Issuer;
+    public string GenerateToken(JWTUserForTokenDTO user, int daysToExpire = 5);
+    public Guid ValidateToken(string token);
+}
 
+public class JwtTokenHelper : IJwtGenerator
+{
+    private readonly string _tokenSecret;
+    private readonly string _issuer;
+    private readonly string _audience;
 
-    //TODO: Check if Static or should be changed to singleton
-    static JwtTokenHelper()
+    public JwtTokenHelper(IConfiguration configuration)
     {
-        var configurationBuilder = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-        _configuration = configurationBuilder.Build();
+        IConfigurationSection jwt = configuration.GetRequiredSection("JWT");
 
-        _TokenSecret = _configuration.GetValue<string>("JWT:TokenSecret");
-        _Audience = _configuration.GetValue<string>("JWT:Audience");
-        _Issuer = _configuration.GetValue<string>("JWT:Issuer");
+        _tokenSecret = jwt.GetRequiredSection("TokenSecret").Get<string>()!;
+        _issuer = jwt.GetRequiredSection("Issuer").Get<string>()!;
+        _audience = jwt.GetRequiredSection("Audience").Get<string>()!;
+    }    
 
-        if (_TokenSecret == null || _Audience == null || _Issuer == null)
-        {
-            throw new ArgumentNullException("JWT configuration values are missing.");
-        }
-    }
-
-    public static string GenerateToken(JWTUserForTokenDTO user, int daysToExpire = 5)
+    public string GenerateToken(JWTUserForTokenDTO user, int daysToExpire = 5)
     {
-        var key = Encoding.UTF8.GetBytes(_TokenSecret);
-        var userData = JsonConvert.SerializeObject(user);
-        var tokenDescriptor = new SecurityTokenDescriptor
+        byte[] key = Encoding.UTF8.GetBytes(_tokenSecret);
+        string userData = JsonConvert.SerializeObject(user);
+
+        SecurityTokenDescriptor tokenDescriptor = new()
         {
             Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.UserData, userData) }),
             Expires = DateTime.UtcNow.AddDays(daysToExpire),
-            Issuer = _Issuer,
-            Audience = _Audience,
+            Issuer = _issuer,
+            Audience = _audience,
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        var stringToken = tokenHandler.WriteToken(token);
-        return stringToken;
+
+        JwtSecurityTokenHandler tokenHandler = new();
+        SecurityToken token = new JwtSecurityTokenHandler().CreateToken(tokenDescriptor);
+       
+        return tokenHandler.WriteToken(token);
     }
-    public static Guid ValidateToken(string token)
+
+    public Guid ValidateToken(string token)
     {
         try
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_TokenSecret);
-            var decodedToken = tokenHandler.ValidateToken(token, new TokenValidationParameters
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            byte[] key = Encoding.UTF8.GetBytes(_tokenSecret);
+
+            ClaimsPrincipal decodedToken = tokenHandler.ValidateToken(token, new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 ValidateIssuer = true,
                 ValidateAudience = true,
-                ValidIssuer = _Issuer,
-                ValidAudience = _Audience,
+                ValidIssuer = _issuer,
+                ValidAudience = _audience,
                 IssuerSigningKey = new SymmetricSecurityKey(key)
             }, out SecurityToken validatedToken);
 
-            var userString = decodedToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.UserData)?.Value;
+            Claim? userClaim = decodedToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.UserData);
 
-            if (userString != null)
-            {
+            if (userClaim == null)
                 return Guid.Empty;
-            }
 
-            JWTUserForTokenDTO user = JsonConvert.DeserializeObject<JWTUserForTokenDTO>(userString);
+            JWTUserForTokenDTO? user = JsonConvert.DeserializeObject<JWTUserForTokenDTO>(userClaim.Value);
 
-            if (user != null)
-            {
-                return Guid.Empty;
-            }
-
-            return user.Id;
+            return user?.Id ?? Guid.Empty;
         }
         catch (Exception)
         {
@@ -85,3 +78,4 @@ public class JwtTokenHelper
         }
     }
 }
+
