@@ -1,4 +1,9 @@
 ﻿using AutoMapper;
+using Humteria.Application.DTOs.UserDTO;
+using Humteria.Application.DTOs.UserDTO.Request;
+using Humteria.Application.DTOs.UserDTO.Response;
+using Humteria.Data.Models;
+using Humteria.Data.Services;
 using Humteria.WebAPI.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

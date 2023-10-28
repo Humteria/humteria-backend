@@ -1,4 +1,5 @@
-﻿using Humteria.Application.DTOs.UserDTO;
+﻿using AutoMapper;
+using Humteria.Application.DTOs.UserDTO;
 using Humteria.Application.DTOs.UserDTO.Request;
 using Humteria.Application.DTOs.UserDTO.Response;
 using Humteria.Data.Models;

@@ -1,4 +1,6 @@
-﻿namespace Humteria.Data.Models.ModelBases;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Humteria.Data.Models.ModelBases;
 
 public class ModelBaseTitle : ModelBaseId
 {

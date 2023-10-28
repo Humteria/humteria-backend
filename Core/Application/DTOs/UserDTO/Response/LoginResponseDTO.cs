@@ -1,4 +1,6 @@
-﻿namespace Humteria.Application.DTOs.UserDTO.Response;
+﻿using Humteria.Data.Models.Bases;
+
+namespace Humteria.Application.DTOs.UserDTO.Response;
 
 public class LoginResponseDTO : BaseId
 {

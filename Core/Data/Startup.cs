@@ -1,5 +1,5 @@
-﻿global using System.ComponentModel.DataAnnotations;
-using Humteria.Data.Context;
+﻿using Humteria.Data.Context;
+using Humteria.Data.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,13 +8,11 @@ namespace Humteria.Data;
 
 public static class Startup
 {
-    public static IServiceCollection AddDatabaseServices(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddDbContext<ApplicationDbContext>(options => 
-            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-
-        return services;
-    }
+    public static IServiceCollection AddDatabaseServices(this IServiceCollection services, IConfiguration configuration) =>
+        services
+            .AddDbContext<ApplicationDbContext>(options => 
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")))
+            .AddTransient<IMainInterface, MainSQLServices>();
 
     public static IServiceProvider ConfigureDatabaseServices(this IServiceProvider provider)
     {

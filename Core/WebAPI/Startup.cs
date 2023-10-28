@@ -1,11 +1,7 @@
-﻿global using Humteria.Application.DTOs.UserDTO;
-global using Humteria.Application.DTOs.UserDTO.Request;
-global using Humteria.Application.DTOs.UserDTO.Response;
-global using Humteria.Data.Models;
-global using Humteria.Data.Services;
-global using System.Text;
-using Humteria.Data;
+﻿using System.Text;
+using Humteria.Application;
 using Humteria.Application.Profiles;
+using Humteria.Data.Services;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -15,10 +11,10 @@ namespace Humteria.WebAPI;
 
 public class Startup
 {
-    public IConfiguration Configuration { get; } 
+    private readonly IConfiguration _configuration;
 
     public Startup(IConfiguration configuration) =>
-        Configuration = configuration;
+        _configuration = configuration;
 
     public void ConfigureServices(IServiceCollection services)
     {
@@ -26,9 +22,9 @@ public class Startup
 
         services.AddEndpointsApiExplorer();
 
-        services.AddDatabaseServices(Configuration);
-
         services.AddSingleton<IJwtGenerator, JwtTokenHelper>();
+        
+        services.AddApplicationServices(_configuration);
 
         services.AddSwaggerGen(
             options =>
@@ -61,27 +57,24 @@ public class Startup
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(config =>
             {
-                string _TokenSecret = Configuration.GetValue<string>("JWT:TokenSecret") ?? throw new NullReferenceException("missing token secret!");
-                var key = Encoding.UTF8.GetBytes(_TokenSecret);
+                string tokenSecret = _configuration.GetValue<string>("JWT:TokenSecret") ?? throw new NullReferenceException("missing token secret!");
+                byte[] key = Encoding.UTF8.GetBytes(tokenSecret);
                 config.SaveToken = true;
                 config.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidIssuer = Configuration.GetValue<string>("JWT:Issuer"),
-                    ValidAudience = Configuration.GetValue<string>("JWT:Audience"),
+                    ValidIssuer = _configuration.GetValue<string>("JWT:Issuer"),
+                    ValidAudience = _configuration.GetValue<string>("JWT:Audience"),
                     ValidateIssuerSigningKey = true,
                 };
             });
-
-                services.AddTransient<IMainInterface, MainSQLServices>();
-
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        app.ApplicationServices.ConfigureDatabaseServices();
+        app.ApplicationServices.ConfigureApplicationServices();
 
         app.UseRouting();
         

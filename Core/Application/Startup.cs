@@ -1,18 +1,16 @@
-﻿global using Humteria.Data.Models.Bases;
-global using System.ComponentModel.DataAnnotations;
-global using AutoMapper;
-using Humteria.Application.Profiles;
+﻿using Humteria.Application.Profiles;
+using Humteria.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Humteria.Application;
 
-public class Startup
+public static class Startup
 {
-    public IConfiguration Configuration { get; }
-
-    public Startup(IConfiguration configuration) =>
-        Configuration = configuration;
-
-    public static void ConfigureServices(IServiceCollection services) => services.AddAutoMapper(typeof(AutoMapperProfile));
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration) =>
+        services.AddAutoMapper(typeof(AutoMapperProfile))
+            .AddDatabaseServices(configuration);
+    
+    public static IServiceProvider ConfigureApplicationServices(this IServiceProvider provider) =>
+        provider.ConfigureDatabaseServices();
 }
